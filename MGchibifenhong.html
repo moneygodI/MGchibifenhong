@@ -1,0 +1,368 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>MG分红领取中心</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: "Microsoft Yahei", sans-serif;
+        }
+
+        body {
+            /* 纯渐变背景，无图片，高级耐看 */
+            background: linear-gradient(135deg, #050c24 0%, #102048 100%);
+            min-height: 100vh;
+            padding: 20px 15px;
+            color: #e6edff;
+        }
+
+        .container {
+            max-width: 460px;
+            margin: 0 auto;
+            background: rgba(18, 30, 60, 0.95);
+            border: 1px solid rgba(70, 140, 255, 0.35);
+            border-radius: 18px;
+            padding: 25px 20px;
+            box-shadow: 0 0 30px rgba(45, 120, 255, 0.25);
+        }
+
+        .main-title {
+            text-align: center;
+            font-size: 24px;
+            font-weight: 700;
+            color: #4ea8ff;
+            margin-bottom: 25px;
+            text-shadow: 0 0 8px rgba(78, 168, 255, 0.5);
+            letter-spacing: 2px;
+        }
+
+        .data-card {
+            background: rgba(30, 48, 90, 0.65);
+            border-radius: 12px;
+            padding: 18px 15px;
+            margin-bottom: 15px;
+            border: 1px solid rgba(60, 130, 240, 0.25);
+        }
+
+        .card-label {
+            font-size: 14px;
+            color: #a0b8e8;
+            margin-bottom: 8px;
+        }
+
+        .card-value {
+            font-size: 22px;
+            font-weight: 600;
+            color: #ffffff;
+        }
+
+        .withdraw-input-wrap {
+            margin: 20px 0;
+        }
+
+        .withdraw-input {
+            width: 100%;
+            height: 50px;
+            background: rgba(25, 40, 75, 0.8);
+            border: 1px solid rgba(70, 140, 255, 0.4);
+            border-radius: 10px;
+            padding: 0 15px;
+            color: #fff;
+            font-size: 16px;
+            outline: none;
+        }
+
+        .btn {
+            width: 100%;
+            height: 52px;
+            border: none;
+            border-radius: 10px;
+            font-size: 17px;
+            font-weight: 600;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+
+        .btn-all {
+            background: linear-gradient(90deg, #722ed1, #b37feb);
+            color: #fff;
+        }
+        .btn-get {
+            background: linear-gradient(90deg, #2575fc, #4ea8ff);
+            color: #fff;
+        }
+        .btn-detail {
+            background: transparent;
+            border: none;
+            color: #4ea8ff;
+            margin-top: 8px;
+            height: 44px;
+            font-size: 15px;
+            text-decoration: underline;
+        }
+        .btn-connect {
+            background: linear-gradient(90deg, #10b981, #34d399);
+            color: #fff;
+            margin-bottom: 10px;
+        }
+
+        .contract-box {
+            margin-top: 25px;
+            padding-top: 15px;
+            border-top: 1px dashed rgba(70, 140, 255, 0.25);
+        }
+
+        .contract-tip {
+            font-size: 14px;
+            color: #ffc864;
+            margin-bottom: 8px;
+        }
+
+        .contract-addr {
+            font-size: 13px;
+            color: #b0c8f0;
+            word-break: break-all;
+        }
+
+        .footer-tip {
+            margin-top: 20px;
+            font-size: 12px;
+            color: #ff7c7c;
+            text-align: center;
+        }
+
+        .modal-mask {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.75);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 999;
+            padding: 15px;
+        }
+
+        .modal-box {
+            width: 100%;
+            max-width: 460px;
+            background: #0f1a36;
+            border: 1px solid rgba(70, 140, 255, 0.4);
+            border-radius: 15px;
+            padding: 20px;
+            max-height: 80vh;
+            overflow-y: auto;
+        }
+
+        .modal-title {
+            font-size: 18px;
+            color: #4ea8ff;
+            text-align: center;
+            margin-bottom: 15px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid rgba(70, 140, 255, 0.2);
+        }
+
+        .detail-item {
+            padding: 12px 0;
+            border-bottom: 1px solid rgba(60, 130, 240, 0.15);
+            font-size: 14px;
+            color: #d0e0ff;
+        }
+
+        .close-btn {
+            width: 100%;
+            height: 44px;
+            margin-top: 15px;
+            background: #2d4880;
+            color: #fff;
+            border: none;
+            border-radius: 8px;
+            font-size: 15px;
+        }
+
+        .msg-tip {
+            text-align: center;
+            font-size: 14px;
+            margin: 10px 0;
+            height: 20px;
+        }
+        .success {color: #60ff96;}
+        .error {color: #ff7c7c;}
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2 class="main-title">MG分红领取中心</h2>
+        <button class="btn btn-connect" id="connectWalletBtn">连接钱包</button>
+
+        <div class="data-card">
+            <div class="card-label">当前可领取分红</div>
+            <div class="card-value" id="canGetDividend">0.0000</div>
+        </div>
+
+        <div class="withdraw-input-wrap">
+            <input type="text" class="withdraw-input" id="getAmount" placeholder="请输入要领取的分红数量">
+            <div class="msg-tip" id="msgTip"></div>
+            <button class="btn btn-all" id="getAllBtn">一键全部领取</button>
+            <button class="btn btn-get" id="getBtn">立即领取分红</button>
+        </div>
+
+        <div class="data-card">
+            <div class="card-label">已领取分红总额度</div>
+            <div class="card-value" id="totalGotDividend">0.0000</div>
+            <button class="btn-detail" id="openDetailBtn">点击查看领取明细</button>
+        </div>
+
+        <div class="contract-box">
+            <div class="contract-tip">认准MG唯一合约地址：</div>
+            <div class="contract-addr" id="mainContract">0xf8A64041FB2c957b20b3a6DcEAD57216E857F56b</div>
+        </div>
+
+        <div class="footer-tip">
+            温馨提示：请在30天内领取您的分红，否则过期自动销毁
+        </div>
+    </div>
+
+    <div class="modal-mask" id="detailModal">
+        <div class="modal-box">
+            <h3 class="modal-title">分红领取明细</h3>
+            <div id="detailList">
+                <div class="detail-item">暂无领取记录</div>
+            </div>
+            <button class="close-btn" id="closeModalBtn">关闭</button>
+        </div>
+    </div>
+
+    <script src="https://unpkg.com/ethers@5.7.2/dist/ethers.umd.min.js"></script>
+    <script>
+        const CONFIG = {
+            dividendContract: "0xf8A64041FB2c957b20b3a6DcEAD57216E857F56b",
+            chainId: 56,
+            decimals: 18
+        };
+        const DIVIDEND_ABI = [
+            "function getAvailableDividend() view returns(uint256)",
+            "function getTotalClaimed() view returns(uint256)",
+            "function claimDividend(uint256 amount) external",
+            "function getClaimRecords() view returns(string[])"
+        ];
+        let signer = null, dividendContract = null;
+        let availableWei = ethers.BigNumber.from("0");
+        const { ethereum } = window;
+
+        const connectWalletBtn = document.getElementById("connectWalletBtn");
+        const canGetDividendEl = document.getElementById("canGetDividend");
+        const totalGotDividendEl = document.getElementById("totalGotDividend");
+        const getAmountEl = document.getElementById("getAmount");
+        const getBtn = document.getElementById("getBtn");
+        const getAllBtn = document.getElementById("getAllBtn");
+        const msgTip = document.getElementById("msgTip");
+        const openDetailBtn = document.getElementById("openDetailBtn");
+        const detailModal = document.getElementById("detailModal");
+        const closeModalBtn = document.getElementById("closeModalBtn");
+        const detailList = document.getElementById("detailList");
+
+        function formatNum(wei) {
+            return parseFloat(ethers.utils.formatUnits(wei, CONFIG.decimals)).toFixed(4);
+        }
+        function showMsg(text, type = "") {
+            msgTip.innerText = text;
+            msgTip.className = "msg-tip " + type;
+            setTimeout(() => msgTip.innerText = "", 3000);
+        }
+        async function switchChain() {
+            try {
+                await ethereum.request({method: "wallet_switchEthereumChain",params: [{ chainId: ethers.utils.hexValue(CONFIG.chainId) }]});
+            } catch (e) {
+                if (e.code === 4902) {
+                    await ethereum.request({method: "wallet_addEthereumChain",params: [{chainId: ethers.utils.hexValue(CONFIG.chainId),chainName: "Binance Smart Chain",rpcUrls: ["https://bsc-dataseed1.binance.org/"],blockExplorerUrls: ["https://bscscan.com/"],nativeCurrency: { name: "BNB", symbol: "BNB", decimals: 18 }}]});
+                }
+            }
+        }
+        async function connectWallet() {
+            if (!ethereum) { showMsg("请使用钱包浏览器打开", "error"); return; }
+            try {
+                await ethereum.request({ method: "eth_requestAccounts" });
+                await switchChain();
+                const provider = new ethers.providers.Web3Provider(ethereum);
+                signer = provider.getSigner();
+                dividendContract = new ethers.Contract(CONFIG.dividendContract, DIVIDEND_ABI, signer);
+                connectWalletBtn.style.display = "none";
+                await loadDividendData();
+                showMsg("钱包连接成功", "success");
+            } catch (err) { showMsg("钱包连接失败", "error"); }
+        }
+        async function loadDividendData() {
+            if (!dividendContract) return;
+            try {
+                availableWei = await dividendContract.getAvailableDividend();
+                const totalClaimed = await dividendContract.getTotalClaimed();
+                canGetDividendEl.innerText = formatNum(availableWei);
+                totalGotDividendEl.innerText = formatNum(totalClaimed);
+            } catch (err) { showMsg("数据读取失败", "error"); }
+        }
+        async function claimDividend() {
+            if (!dividendContract) { showMsg("请先连接钱包", "error"); return; }
+            const inputVal = getAmountEl.value.trim();
+            if (!inputVal || isNaN(Number(inputVal)) || Number(inputVal) <= 0) { showMsg("请输入合法领取数量", "error"); return; }
+            try {
+                const amountWei = ethers.utils.parseUnits(inputVal, CONFIG.decimals);
+                getBtn.innerText = "处理中...";
+                getBtn.disabled = true; getAllBtn.disabled = true;
+                const tx = await dividendContract.claimDividend(amountWei);
+                await tx.wait();
+                showMsg("分红领取成功！", "success");
+                getAmountEl.value = "";
+                await loadDividendData();
+            } catch (err) { showMsg("领取失败", "error"); }
+            finally { getBtn.innerText = "立即领取分红"; getBtn.disabled = false; getAllBtn.disabled = false; }
+        }
+        async function claimAllDividend() {
+            if (!dividendContract) { showMsg("请先连接钱包", "error"); return; }
+            if(availableWei.isZero()){ showMsg("暂无可领取分红", "error"); return; }
+            try {
+                getAllBtn.innerText = "处理中...";
+                getAllBtn.disabled = true; getBtn.disabled = true;
+                const tx = await dividendContract.claimDividend(availableWei);
+                await tx.wait();
+                showMsg("全部分红领取成功！", "success");
+                getAmountEl.value = "";
+                await loadDividendData();
+            } catch (err) { showMsg("领取失败", "error"); }
+            finally { getAllBtn.innerText = "一键全部领取"; getAllBtn.disabled = false; getBtn.disabled = false; }
+        }
+        async function loadDetail() {
+            if (!dividendContract) return;
+            try {
+                const records = await dividendContract.getClaimRecords();
+                if (!records || records.length === 0) { detailList.innerHTML = '<div class="detail-item">暂无领取记录</div>'; return; }
+                let html = "";
+                records.forEach((item, idx) => { html += `<div class="detail-item">第${idx+1}笔：${item}</div>`; });
+                detailList.innerHTML = html;
+            } catch (err) { detailList.innerHTML = '<div class="detail-item">明细读取失败</div>'; }
+        }
+        function resetPage() {
+            signer = null; dividendContract = null;
+            connectWalletBtn.style.display = "block";
+            canGetDividendEl.innerText = "0.0000";
+            totalGotDividendEl.innerText = "0.0000";
+        }
+        connectWalletBtn.addEventListener("click", connectWallet);
+        getBtn.addEventListener("click", claimDividend);
+        getAllBtn.addEventListener("click", claimAllDividend);
+        openDetailBtn.addEventListener("click", async () => { detailModal.style.display = "flex"; await loadDetail(); });
+        closeModalBtn.addEventListener("click", () => { detailModal.style.display = "none"; });
+        if (ethereum) {
+            ethereum.on("accountsChanged", resetPage);
+            ethereum.on("chainChanged", resetPage);
+        }
+    </script>
+</body>
+</html>
