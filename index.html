@@ -20,6 +20,12 @@
         .container {
             max-width: 500px;
             margin: 0 auto;
+            min-height: calc(100vh - 60px);
+            display: flex;
+            flex-direction: column;
+        }
+        .main-content {
+            flex: 1;
         }
         h1 {
             text-align: center;
@@ -122,7 +128,9 @@
         @keyframes spin {
             to { transform: rotate(360deg); }
         }
-        .hidden { display: none; }
+        .hidden {
+            display: none !important;
+        }
         table {
             width: 100%;
             border-collapse: collapse;
@@ -138,71 +146,76 @@
             background: rgba(30, 58, 95, 0.7);
             color: #a0cfff;
         }
-        .footer-tip {
-            margin-top: 25px;
+        /* 优化底部提示间距，手机端正常显示 */
+        .global-footer-tip {
+            margin-top: 60px;
             font-size: 13px;
             color: #ff8888;
             text-align: center;
+            padding-bottom: 20px;
         }
     </style>
 </head>
 <body>
 <div class="container">
-    <h1>MG分红领取中心</h1>
-    <div class="contract-tip">
-        ⚠️ 认准唯一合约地址：<br>
-        0x661150e0D8Bd7D6dF8F14a3b27890bcD64162a8D
-    </div>
+    <div class="main-content">
+        <h1>MG分红领取中心</h1>
 
-    <!-- 状态1：未连接钱包 只显示连接按钮 -->
-    <div id="wallet-section">
-        <button class="btn btn-connect" onclick="connectWallet()">💰 连接钱包💰</button>
-    </div>
-
-    <!-- 状态2：连接钱包后 展示全部内容 -->
-    <div id="user-info" class="hidden">
-        <div class="info-card">
-            <div class="info-line">👤 钱包地址：<span class="info-value" id="user-addr"></span></div>
-            <div class="info-line">💰 持币数量：<span class="info-value" id="balance"></span> MG</div>
-            <div class="info-line">🎁 待领分红：<span class="info-value" id="pending"></span> MG</div>
-            <div class="info-line">📅 今日已领：<span class="info-value" id="daily-claims"></span> / 3 次</div>
-            <div class="info-line">⏰ 领取状态：<span class="info-value" id="next-claim"></span></div>
+        <!-- 合约地址提示 -->
+        <div id="contract-txt" class="contract-tip">
+            ⚠️ 认准唯一合约地址：<br>
+            0x661150e0D8Bd7D6dF8F14a3b27890bcD64162a8D
         </div>
 
-        <input type="text" class="input-box" id="claim-amount" placeholder="请输入要领取的分红数量">
+        <!-- 状态1：未连接钱包 -->
+        <div id="wallet-section">
+            <button class="btn btn-connect" onclick="connectWallet()"> 连接钱包</button>
+        </div>
 
-        <button class="btn btn-all" onclick="claimAll()">一键全部领取</button>
-        <button id="claim-btn" class="btn btn-claim" onclick="claimAmount()">立即领取分红</button>
+        <!-- 状态2：连接钱包后 -->
+        <div id="user-info" class="hidden">
+            <div class="info-card">
+                <div class="info-line">👤 钱包地址：<span class="info-value" id="user-addr"></span></div>
+                <div class="info-line">💰 持币数量：<span class="info-value" id="balance"></span> MG</div>
+                <div class="info-line">🎁 待领分红：<span class="info-value" id="pending"></span> MG</div>
+                <div class="info-line">📅 今日已领：<span class="info-value" id="daily-claims"></span> / 3 次</div>
+                <div class="info-line">⏰ 领取状态：<span class="info-value" id="next-claim"></span></div>
+            </div>
 
-        <div id="tx-status" class="status-text"></div>
+            <input type="text" class="input-box" id="claim-amount" placeholder="请输入要领取的分红数量">
 
-        <div class="info-card">
-            <div class="detail-link" onclick="toggleHistory()">📋 点击查看领取明细</div>
-            <!-- 领取历史表格 默认隐藏 -->
-            <div id="history-wrap" class="hidden">
-                <table>
-                    <thead>
-                        <tr>
-                            <th>领取时间</th>
-                            <th>分红数量(MG)</th>
-                        </tr>
-                    </thead>
-                    <tbody id="history-body">
-                        <tr><td colspan="2">加载中...</td></tr>
-                    </tbody>
-                </table>
+            <button class="btn btn-all" onclick="claimAll()">一键全部领取</button>
+            <button id="claim-btn" class="btn btn-claim" onclick="claimAmount()">立即领取分红</button>
+
+            <div id="tx-status" class="status-text"></div>
+
+            <div class="info-card">
+                <div class="detail-link" onclick="toggleHistory()">点击查看领取明细</div>
+                <div id="history-wrap" class="hidden">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>领取时间</th>
+                                <th>分红数量(MG)</th>
+                            </tr>
+                        </thead>
+                        <tbody id="history-body">
+                            <tr><td colspan="2">加载中...</td></tr>
+                        </tbody>
+                    </table>
+                </div>
             </div>
         </div>
     </div>
 
-    <div class="footer-tip">
-        ⚠️ 请在30天内领取分红，过期未领取将自动销毁 ⚠️
+    <!-- 页面底部提示，加大上下边距，手机端可见 -->
+    <div id="footer-tip" class="global-footer-tip">
+        ⚠️ 请在30天内领取分红，过期未领取将自动销毁
     </div>
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/ethers@5.7.2/dist/ethers.umd.min.js"></script>
 <script>
-    // 合约配置
     const CONTRACT_ADDRESS = '0x661150e0D8Bd7D6dF8F14a3b27890bcD64162a8D';
     const CHAIN_ID = 56;
     const MIN_HOLD_NUM = ethers.utils.parseEther("100");
@@ -223,7 +236,6 @@
     let isBusy = false;
     let historyShow = false;
 
-    // 初始化钱包
     async function initProvider() {
         if (!window.ethereum) {
             alert('请安装 MetaMask/TP 钱包！');
@@ -233,7 +245,6 @@
         return true;
     }
 
-    // 校验BSC主网
     async function checkChain() {
         const network = await provider.getNetwork();
         if (network.chainId !== CHAIN_ID) {
@@ -243,7 +254,6 @@
         return true;
     }
 
-    // 连接钱包
     async function connectWallet() {
         if (isBusy) return;
         isBusy = true;
@@ -258,8 +268,11 @@
             signer = provider.getSigner();
             contract = new ethers.Contract(CONTRACT_ADDRESS, ABI, signer);
 
-            // 切换界面：隐藏连接按钮，展示数据面板
+            // 隐藏连接区、合约地址、底部提示
             document.getElementById('wallet-section').classList.add('hidden');
+            document.getElementById('contract-txt').classList.add('hidden');
+            document.getElementById('footer-tip').classList.add('hidden');
+            // 展示主界面
             document.getElementById('user-info').classList.remove('hidden');
 
             await refreshUserData();
@@ -284,7 +297,6 @@
         isBusy = false;
     }
 
-    // 刷新账户数据 & 领取状态判断
     async function refreshUserData() {
         if (!contract || !userAddress) return;
         try {
@@ -295,7 +307,6 @@
                 contract.lastClaim(userAddress)
             ]);
 
-            // 赋值展示
             document.getElementById('user-addr').innerText = userAddress;
             document.getElementById('balance').innerText = ethers.utils.formatEther(bal);
             document.getElementById('pending').innerText = ethers.utils.formatEther(pending);
@@ -309,13 +320,11 @@
             const input = document.getElementById('claim-amount');
             const allBtn = document.querySelector('.btn-all');
 
-            // 重置状态
             claimBtn.disabled = false;
             allBtn.disabled = false;
             input.disabled = false;
             document.getElementById('tx-status').innerHTML = '';
 
-            // 条件判断
             if (bal.lt(MIN_HOLD_NUM)) {
                 nextTip.innerText = '❌ 持币不足100 MG，无法领取';
                 claimBtn.disabled = allBtn.disabled = input.disabled = true;
@@ -336,14 +345,12 @@
         }
     }
 
-    // 切换历史明细显示/隐藏
     function toggleHistory() {
         historyShow = !historyShow;
         const wrap = document.getElementById('history-wrap');
         wrap.classList.toggle('hidden', !historyShow);
     }
 
-    // 加载领取历史
     async function loadHistory() {
         if (!contract || !userAddress) return;
         const tbody = document.getElementById('history-body');
@@ -370,13 +377,11 @@
         }
     }
 
-    // 一键全部领取
     async function claimAll() {
         document.getElementById('claim-amount').value = '';
         await doClaim();
     }
 
-    // 按输入领取
     async function claimAmount() {
         const val = document.getElementById('claim-amount').value.trim();
         if (!val || isNaN(val) || Number(val) <= 0) {
@@ -386,7 +391,6 @@
         await doClaim();
     }
 
-    // 核心领取逻辑：自转0结算 + 领取分红
     async function doClaim() {
         if (isBusy) return;
         isBusy = true;
@@ -397,7 +401,6 @@
 
         try {
             status.innerHTML = '<span class="loader"></span> 结算分红中...';
-            // 自转0代币触发结算
             const tx1 = await contract.transfer(userAddress, 0);
             await tx1.wait();
 
