@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MG分红领取中心</title>
+    <title>MG持币分红领取中心</title>
     <style>
         * {
             margin: 0;
@@ -12,220 +12,224 @@
             font-family: Arial, sans-serif;
         }
         body {
-            background: linear-gradient(180deg, #0a192f 0%, #050e1a 100%);
+            background: #0b132b;
             min-height: 100vh;
-            padding: 30px 20px;
             color: #fff;
+            padding-bottom: 70px;
         }
-        .container {
-            max-width: 500px;
-            margin: 0 auto;
-            min-height: calc(100vh - 60px);
-            display: flex;
-            flex-direction: column;
-        }
-        .main-content {
-            flex: 1;
-        }
-        h1 {
-            text-align: center;
-            font-size: 30px;
-            margin-bottom: 40px;
-            color: #64b5f6;
-        }
-        .contract-tip {
-            font-size: 13px;
-            color: #8892b0;
-            text-align: center;
-            word-break: break-all;
-            margin-bottom: 30px;
-            line-height: 1.6;
-        }
-        .btn {
-            width: 100%;
-            padding: 16px;
-            font-size: 18px;
+        /* 右上角连接钱包按钮 */
+        .wallet-top-btn {
+            position: fixed;
+            top: 15px;
+            right: 20px;
+            z-index: 999;
+            padding: 10px 20px;
+            background: linear-gradient(90deg, #1db954, #34d399);
+            color: #fff;
             border: none;
-            border-radius: 12px;
-            cursor: pointer;
-            margin-bottom: 18px;
-            font-weight: bold;
-            transition: opacity 0.2s;
-        }
-        .btn:disabled {
-            opacity: 0.5;
-            cursor: not-allowed;
-        }
-        .btn-connect {
-            background: linear-gradient(90deg, #21c174 0%, #3dd28d 100%);
-            color: white;
-        }
-        .btn-all {
-            background: linear-gradient(90deg, #7b2cbf 0%, #c77dff 100%);
-            color: white;
-        }
-        .btn-claim {
-            background: linear-gradient(90deg, #2563eb 0%, #60a5fa 100%);
-            color: white;
-        }
-        .info-card {
-            background: rgba(25, 47, 81, 0.6);
-            border-radius: 12px;
-            padding: 22px;
-            margin-bottom: 18px;
-            border: 1px solid rgba(99, 179, 237, 0.2);
-        }
-        .info-line {
-            font-size: 16px;
-            color: #a0cfff;
-            margin: 8px 0;
-            line-height: 1.7;
-            word-break: break-all;
-        }
-        .info-value {
-            color: #ffffff;
-            font-weight: bold;
-        }
-        .input-box {
-            width: 100%;
-            background: rgba(25, 47, 81, 0.6);
-            border: 1px solid rgba(99, 179, 237, 0.2);
-            border-radius: 12px;
-            padding: 18px;
-            font-size: 18px;
-            color: #fff;
-            margin-bottom: 18px;
-            outline: none;
-        }
-        .input-box::placeholder {
-            color: #778da9;
-        }
-        .detail-link {
-            color: #60d5ff;
-            text-decoration: underline;
+            border-radius: 8px;
             font-size: 15px;
             cursor: pointer;
-            display: inline-block;
-            margin-top: 10px;
+            box-shadow: 0 2px 8px rgba(29, 185, 84, 0.3);
         }
-        .status-text {
-            margin: 10px 0 20px;
+        .wallet-top-btn:hover {
+            opacity: 0.9;
+        }
+        /* 主容器卡片 */
+        .container {
+            max-width: 520px;
+            margin: 80px auto 0;
+            padding: 20px;
+        }
+        .card {
+            background: #1a2744;
+            border: 1px solid #3b82f650;
+            border-radius: 16px;
+            padding: 28px;
+        }
+        .title {
             text-align: center;
-            font-size: 16px;
+            font-size: 28px;
+            font-weight: bold;
+            background: linear-gradient(90deg, #60a5fa, #a78bfa);
+            -webkit-background-clip: text;
+            color: transparent;
+            margin-bottom:22px;
         }
-        .success { color: #3dd28d; }
-        .error { color: #ff6b6b; }
+        .contract-addr{
+            color:#93c5fd;
+            font-size:14px;
+            text-align:center;
+            word-break:break-all;
+            margin-bottom:20px;
+            line-height:1.6;
+        }
+        .info-block {
+            background: #16213e;
+            border: 1px solid #3b82f630;
+            border-radius: 12px;
+            padding: 18px;
+            margin-bottom:20px;
+            line-height:2;
+        }
+        .info-block p{
+            color:#bfdbfe;
+        }
+        .info-block span{
+            color:#ffffff;
+        }
+        .btn-group{
+            display:flex;
+            gap:12px;
+            flex-wrap:wrap;
+            margin-bottom:15px;
+        }
+        #check-btn{
+            flex:1;
+            padding:14px;
+            border:none;
+            border-radius:12px;
+            font-size:16px;
+            background:linear-gradient(90deg,#f59e0b,#fbbf24);
+            color:#fff;
+            cursor:pointer;
+        }
+        #claim-btn{
+            flex:1;
+            padding:14px;
+            border:none;
+            border-radius:12px;
+            font-size:16px;
+            background:linear-gradient(90deg,#10b981,#34d399);
+            color:#fff;
+            cursor:pointer;
+        }
+        #check-btn:disabled,#claim-btn:disabled{
+            opacity:0.55;
+            cursor:not-allowed;
+        }
+        .pending-display{
+            font-size:19px;
+            font-weight:bold;
+            color:#a78bfa;
+            margin:12px 0;
+        }
+        .status-txt {
+            font-size: 15px;
+            margin: 10px 0;
+        }
+        .success { color: #34d399; font-weight:bold; }
+        .error { color: #f87171; font-weight:bold; }
         .loader {
             display: inline-block;
-            width: 20px;
-            height: 20px;
-            border: 3px solid rgba(255,255,255,.3);
-            border-top: 3px solid #fff;
+            width: 16px;
+            height: 16px;
+            border: 2px solid rgba(255,255,255,0.2);
+            border-top: 2px solid #60a5fa;
             border-radius: 50%;
             animation: spin 1s linear infinite;
-            margin-left: 10px;
+            margin-right: 6px;
+            vertical-align:middle;
         }
         @keyframes spin {
             to { transform: rotate(360deg); }
         }
-        .hidden {
-            display: none !important;
+        /*表格样式*/
+        table{
+            width:100%;
+            border-collapse:collapse;
+            margin-top:25px;
         }
-        table {
+        th,td{
+            padding:11px 8px;
+            border-bottom:1px solid #3b82f630;
+            color:#bfdbfe;
+            text-align:left;
+        }
+        th{
+            background:#16213e;
+            color:#93c5fd;
+        }
+        h3{
+            color:#93c5fd;
+            margin-top:25px;
+            margin-bottom:10px;
+        }
+        /*底部常驻提示*/
+        .footer-tip {
+            position: fixed;
+            bottom: 0;
+            left: 0;
             width: 100%;
-            border-collapse: collapse;
-            margin-top: 15px;
-        }
-        th, td {
-            padding: 10px;
-            border: 1px solid rgba(99, 179, 237, 0.2);
-            text-align: left;
-            color: #cbd5e1;
-        }
-        th {
-            background: rgba(30, 58, 95, 0.7);
-            color: #a0cfff;
-        }
-        /* 优化底部提示间距，手机端正常显示 */
-        .global-footer-tip {
-            margin-top: 60px;
-            font-size: 13px;
-            color: #ff8888;
+            background: #16213e;
+            color: #f87171;
             text-align: center;
-            padding-bottom: 20px;
+            padding: 12px;
+            font-size: 14px;
+            border-top: 1px solid #3b82f630;
         }
     </style>
 </head>
 <body>
-<div class="container">
-    <div class="main-content">
-        <h1>MG分红领取中心</h1>
+    <!--右上角钱包按钮-->
+    <button class="wallet-top-btn" id="topWalletBtn" onclick="connectWallet()">连接钱包</button>
 
-        <!-- 合约地址提示 -->
-        <div id="contract-txt" class="contract-tip">
-            ⚠️ 认准唯一合约地址：<br>
-            0x661150e0D8Bd7D6dF8F14a3b27890bcD64162a8D
-        </div>
-
-        <!-- 状态1：未连接钱包 -->
-        <div id="wallet-section">
-            <button class="btn btn-connect" onclick="connectWallet()"> 连接钱包</button>
-        </div>
-
-        <!-- 状态2：连接钱包后 -->
-        <div id="user-info" class="hidden">
-            <div class="info-card">
-                <div class="info-line">👤 钱包地址：<span class="info-value" id="user-addr"></span></div>
-                <div class="info-line">💰 持币数量：<span class="info-value" id="balance"></span> MG</div>
-                <div class="info-line">🎁 待领分红：<span class="info-value" id="pending"></span> MG</div>
-                <div class="info-line">📅 今日已领：<span class="info-value" id="daily-claims"></span> / 3 次</div>
-                <div class="info-line">⏰ 领取状态：<span class="info-value" id="next-claim"></span></div>
+    <div class="container">
+        <div class="card">
+            <h1 class="title">MG持币分红领取中心</h1>
+            <div class="contract-addr">
+                ⚠️ 请认准唯一合约地址：<br>
+                <strong>0x661150e0D8Bd7D6dF8F14a3b27890bcD64162a8D</strong>
             </div>
 
-            <input type="text" class="input-box" id="claim-amount" placeholder="请输入要领取的分红数量">
-
-            <button class="btn btn-all" onclick="claimAll()">一键全部领取</button>
-            <button id="claim-btn" class="btn btn-claim" onclick="claimAmount()">立即领取分红</button>
-
-            <div id="tx-status" class="status-text"></div>
-
-            <div class="info-card">
-                <div class="detail-link" onclick="toggleHistory()">点击查看领取明细</div>
-                <div id="history-wrap" class="hidden">
-                    <table>
-                        <thead>
-                            <tr>
-                                <th>领取时间</th>
-                                <th>分红数量(MG)</th>
-                            </tr>
-                        </thead>
-                        <tbody id="history-body">
-                            <tr><td colspan="2">加载中...</td></tr>
-                        </tbody>
-                    </table>
+            <div id="user-info">
+                <div class="info-block">
+                    <p>地址: <span id="user-addr"></span></p>
+                    <p>持币数量: <span id="balance"></span> MG</p>
+                    <p>今日已领: <span id="daily-claims"></span> / 3 次</p>
+                    <p>下次可领时间: <span id="next-claim"></span></p>
                 </div>
+
+                <div class="btn-group">
+                    <button id="check-btn" onclick="checkPending()">🔍 查看可领分红</button>
+                </div>
+
+                <div id="pending-area" style="display:none;">
+                    <p class="pending-display">可领分红: <span id="pending-amount"></span> MG</p>
+                    <div class="btn-group">
+                        <button id="claim-btn" onclick="claimDividend()" disabled>领取分红</button>
+                    </div>
+                </div>
+                <div class="status-txt" id="tx-status"></div>
             </div>
+
+            <h3>📋 领取历史 (最近10条)</h3>
+            <table>
+                <thead>
+                    <tr><th>时间</th><th>数量 (MG)</th></tr>
+                </thead>
+                <tbody id="history-body"></tbody>
+            </table>
         </div>
     </div>
 
-    <!-- 页面底部提示，加大上下边距，手机端可见 -->
-    <div id="footer-tip" class="global-footer-tip">
-        ⚠️ 请在30天内领取分红，过期未领取将自动销毁
+    <!--底部30天提示固定栏-->
+    <div class="footer-tip">
+        ⚠️ 请在30天内领取您的持币分红，过期未领取将自动销毁
     </div>
-</div>
 
 <script src="https://cdn.jsdelivr.net/npm/ethers@5.7.2/dist/ethers.umd.min.js"></script>
 <script>
     const CONTRACT_ADDRESS = '0x661150e0D8Bd7D6dF8F14a3b27890bcD64162a8D';
     const CHAIN_ID = 56;
-    const MIN_HOLD_NUM = ethers.utils.parseEther("100");
-    const COOLDOWN_TIME = 3600;
 
     const ABI = [
         "function balanceOf(address) view returns (uint256)",
         "function pendingPoints(address) view returns (uint256)",
         "function dailyClaims(address) view returns (uint256)",
         "function lastClaim(address) view returns (uint256)",
+        "function globalIndex() view returns (uint256)",
+        "function userIndex(address) view returns (uint256)",
         "function claimPoints() external",
         "function transfer(address to, uint256 amount) returns (bool)",
         "event PointsClaimed(address indexed user, uint256 amount)"
@@ -233,193 +237,146 @@
 
     let provider, signer, contract;
     let userAddress = null;
-    let isBusy = false;
-    let historyShow = false;
+    let pendingChecked = false;
 
     async function initProvider() {
-        if (!window.ethereum) {
-            alert('请安装 MetaMask/TP 钱包！');
-            return false;
+        if (window.ethereum) {
+            provider = new ethers.providers.Web3Provider(window.ethereum);
+        } else {
+            alert('请安装 MetaMask 或 TP 钱包!');
         }
-        provider = new ethers.providers.Web3Provider(window.ethereum);
-        return true;
-    }
-
-    async function checkChain() {
-        const network = await provider.getNetwork();
-        if (network.chainId !== CHAIN_ID) {
-            alert('请切换钱包至 BSC 币安智能链主网！');
-            return false;
-        }
-        return true;
     }
 
     async function connectWallet() {
-        if (isBusy) return;
-        isBusy = true;
-        if (!await initProvider() || !await checkChain()) {
-            isBusy = false;
-            return;
-        }
-
+        if (!provider) await initProvider();
         try {
             const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
             userAddress = accounts[0];
             signer = provider.getSigner();
             contract = new ethers.Contract(CONTRACT_ADDRESS, ABI, signer);
-
-            // 隐藏连接区、合约地址、底部提示
-            document.getElementById('wallet-section').classList.add('hidden');
-            document.getElementById('contract-txt').classList.add('hidden');
-            document.getElementById('footer-tip').classList.add('hidden');
-            // 展示主界面
-            document.getElementById('user-info').classList.remove('hidden');
-
+            document.getElementById('topWalletBtn').innerText = '已连接钱包';
             await refreshUserData();
             await loadHistory();
 
-            // 监听账户/网络切换
-            window.ethereum.on('accountsChanged', accs => {
+            //监听钱包切换
+            window.ethereum.on('accountsChanged', (accs) => {
                 if (accs.length === 0) location.reload();
                 else {
                     userAddress = accs[0];
                     signer = provider.getSigner();
                     contract = new ethers.Contract(CONTRACT_ADDRESS, ABI, signer);
+                    resetPendingArea();
                     refreshUserData();
                     loadHistory();
                 }
-            });
-            window.ethereum.on('chainChanged', () => location.reload());
-
+            })
         } catch (err) {
-            alert('连接失败：' + err.message);
+            console.error(err);
+            alert('连接失败: ' + err.message);
         }
-        isBusy = false;
     }
 
     async function refreshUserData() {
         if (!contract || !userAddress) return;
         try {
-            const [bal, pending, daily, lastClaim] = await Promise.all([
+            const [bal, daily, lastClaim] = await Promise.all([
                 contract.balanceOf(userAddress),
-                contract.pendingPoints(userAddress),
                 contract.dailyClaims(userAddress),
                 contract.lastClaim(userAddress)
             ]);
-
             document.getElementById('user-addr').innerText = userAddress;
             document.getElementById('balance').innerText = ethers.utils.formatEther(bal);
-            document.getElementById('pending').innerText = ethers.utils.formatEther(pending);
             document.getElementById('daily-claims').innerText = daily.toString();
 
             const lastTs = lastClaim.toNumber();
+            const cooldown = 3600;
+            const nextTime = lastTs + cooldown;
             const now = Math.floor(Date.now() / 1000);
-            const nextTime = lastTs + COOLDOWN_TIME;
-            const claimBtn = document.getElementById('claim-btn');
-            const nextTip = document.getElementById('next-claim');
-            const input = document.getElementById('claim-amount');
-            const allBtn = document.querySelector('.btn-all');
-
-            claimBtn.disabled = false;
-            allBtn.disabled = false;
-            input.disabled = false;
-            document.getElementById('tx-status').innerHTML = '';
-
-            if (bal.lt(MIN_HOLD_NUM)) {
-                nextTip.innerText = '❌ 持币不足100 MG，无法领取';
-                claimBtn.disabled = allBtn.disabled = input.disabled = true;
-            } else if (Number(daily) >= 3) {
-                nextTip.innerText = '❌ 今日领取次数已达上限(3次)';
-                claimBtn.disabled = allBtn.disabled = input.disabled = true;
-            } else if (now < nextTime) {
-                const remain = nextTime - now;
-                const m = Math.floor(remain / 60);
-                const s = remain % 60;
-                nextTip.innerText = `⏳ 冷却中，还需 ${m}分${s}秒`;
-                claimBtn.disabled = allBtn.disabled = input.disabled = true;
-            } else {
-                nextTip.innerText = '✅ 正常可领取';
+            let nextStr;
+            if(now >= nextTime){
+                nextStr = '现在可以领取';
+            }else{
+                const leave = nextTime - now;
+                let m = Math.floor(leave/60);
+                let s = leave%60;
+                nextStr = `还需 ${m}分${s}秒`;
             }
-        } catch (e) {
-            console.error(e);
+            document.getElementById('next-claim').innerText = nextStr;
+
+            //不足100禁用查看
+            const min100 = ethers.utils.parseEther('100');
+            document.getElementById('check-btn').disabled = bal.lt(min100);
+            if(bal.lt(min100)){
+                document.getElementById('next-claim').innerText = '持币不足100，无法领取';
+            }
+        } catch (e) {console.error(e)}
+    }
+
+    async function checkPending() {
+        if (!contract || !userAddress) return;
+        const statusEl = document.getElementById('tx-status');
+        statusEl.innerHTML = '<span class="loader"></span> 正在结算分红点数...';
+        try {
+            const tx = await contract.transfer(userAddress,0);
+            statusEl.innerHTML = '结算交易确认中... 哈希: ' + tx.hash;
+            await tx.wait();
+            const pending = await contract.pendingPoints(userAddress);
+            document.getElementById('pending-amount').innerText = ethers.utils.formatEther(pending);
+            document.getElementById('pending-area').style.display = 'block';
+            document.getElementById('claim-btn').disabled = pending.isZero();
+            pendingChecked = true;
+            statusEl.innerHTML = '<span class="success">结算完成，请点击领取分红</span>';
+        } catch (err) {
+            statusEl.innerHTML = `<span class="error">结算失败: ${err.message}</span>`;
         }
     }
 
-    function toggleHistory() {
-        historyShow = !historyShow;
-        const wrap = document.getElementById('history-wrap');
-        wrap.classList.toggle('hidden', !historyShow);
+    async function claimDividend() {
+        if (!contract || !userAddress || !pendingChecked) return;
+        const statusEl = document.getElementById('tx-status');
+        statusEl.innerHTML = '<span class="loader"></span> 正在领取分红...';
+        try {
+            const tx = await contract.claimPoints();
+            await tx.wait();
+            statusEl.innerHTML = '<span class="success">领取成功!</span>';
+            resetPendingArea();
+            await refreshUserData();
+            await loadHistory();
+        } catch (err) {
+            statusEl.innerHTML = `<span class="error">领取失败: ${err.message}</span>`;
+        }
+    }
+
+    function resetPendingArea() {
+        document.getElementById('pending-area').style.display = 'none';
+        document.getElementById('claim-btn').disabled = true;
+        document.getElementById('tx-status').innerHTML = '';
+        pendingChecked = false;
     }
 
     async function loadHistory() {
         if (!contract || !userAddress) return;
-        const tbody = document.getElementById('history-body');
         try {
-            const blockNum = await provider.getBlockNumber();
             const filter = contract.filters.PointsClaimed(userAddress);
-            const events = await contract.queryFilter(filter, blockNum - 5000, 'latest');
+            const events = await contract.queryFilter(filter,-10000,'latest');
             events.reverse();
-            const list = events.slice(0, 10);
-
-            if (list.length === 0) {
+            const tbody = document.getElementById('history-body');
+            tbody.innerHTML = '';
+            const list = events.slice(0,10);
+            if(list.length ===0){
                 tbody.innerHTML = '<tr><td colspan="2">暂无领取记录</td></tr>';
                 return;
             }
-            tbody.innerHTML = '';
-            for (let evt of list) {
-                const block = await evt.getBlock();
-                const time = new Date(block.timestamp * 1000).toLocaleString();
-                const amount = ethers.utils.formatEther(evt.args.amount);
-                tbody.innerHTML += `<tr><td>${time}</td><td>${amount}</td></tr>`;
+            for(let item of list){
+                const block = await item.getBlock();
+                const time = new Date(block.timestamp*1000).toLocaleString();
+                const num = ethers.utils.formatEther(item.args.amount);
+                tbody.innerHTML += `<tr><td>${time}</td><td>${num}</td></tr>`;
             }
-        } catch (e) {
-            tbody.innerHTML = '<tr><td colspan="2">记录加载失败</td></tr>';
-        }
+        } catch (e) {console.error(e)}
     }
 
-    async function claimAll() {
-        document.getElementById('claim-amount').value = '';
-        await doClaim();
-    }
-
-    async function claimAmount() {
-        const val = document.getElementById('claim-amount').value.trim();
-        if (!val || isNaN(val) || Number(val) <= 0) {
-            alert('请输入合法领取数量');
-            return;
-        }
-        await doClaim();
-    }
-
-    async function doClaim() {
-        if (isBusy) return;
-        isBusy = true;
-        const status = document.getElementById('tx-status');
-        const btn1 = document.querySelector('.btn-all');
-        const btn2 = document.getElementById('claim-btn');
-        btn1.disabled = btn2.disabled = true;
-
-        try {
-            status.innerHTML = '<span class="loader"></span> 结算分红中...';
-            const tx1 = await contract.transfer(userAddress, 0);
-            await tx1.wait();
-
-            status.innerHTML = '<span class="loader"></span> 领取分红中...';
-            const tx2 = await contract.claimPoints();
-            await tx2.wait();
-
-            status.innerHTML = '<span class="success">✅ 分红领取成功！</span>';
-            await refreshUserData();
-            await loadHistory();
-        } catch (err) {
-            let msg = err.message.includes('user rejected') ? '您取消了交易' : err.message;
-            status.innerHTML = `<span class="error">❌ ${msg}</span>`;
-        }
-        isBusy = false;
-        await refreshUserData();
-    }
-
-    window.addEventListener('load', initProvider);
+    window.onload = initProvider;
 </script>
 </body>
 </html>
