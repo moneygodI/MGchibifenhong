@@ -1,8 +1,9 @@
 <!DOCTYPE html>
 <html lang="zh">
 <head>
+    <!-- 禁止缩放+移动端完美适配核心viewport -->
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no, viewport-fit=cover">
     <title>MG持币分红领取中心</title>
     <style>
         * {
@@ -10,83 +11,88 @@
             padding: 0;
             box-sizing: border-box;
             font-family: Arial, sans-serif;
+            touch-action: manipulation;/*禁止双击/双指缩放*/
         }
-        body {
+        html,body {
             background: #0b132b;
             min-height: 100vh;
             color: #fff;
-            padding-bottom: 70px;
+            padding-bottom: 80px;
+            overflow-x: hidden;/*禁止横向滚动*/
         }
-        /* 右上角连接钱包按钮 */
+        /* 右上角连接钱包按钮 手机自适应 */
         .wallet-top-btn {
             position: fixed;
-            top: 15px;
-            right: 20px;
-            z-index: 999;
-            padding: 10px 20px;
+            top:12px;
+            right:12px;
+            z-index:999;
+            padding:8px 14px;
             background: linear-gradient(90deg, #1db954, #34d399);
             color: #fff;
             border: none;
             border-radius: 8px;
-            font-size: 15px;
+            font-size:14px;
             cursor: pointer;
             box-shadow: 0 2px 8px rgba(29, 185, 84, 0.3);
         }
         .wallet-top-btn:hover {
             opacity: 0.9;
         }
-        /* 主容器卡片 */
+        /* 主容器卡片 手机左右留边 */
         .container {
-            max-width: 520px;
-            margin: 80px auto 0;
-            padding: 20px;
+            max-width:520px;
+            margin:70px auto 0;
+            padding:0 14px;
         }
         .card {
             background: #1a2744;
-            border: 1px solid #3b82f650;
-            border-radius: 16px;
-            padding: 28px;
+            border:1px solid #3b82f650;
+            border-radius:16px;
+            padding:20px;
         }
         .title {
-            text-align: center;
-            font-size: 28px;
-            font-weight: bold;
+            text-align:center;
+            font-size:clamp(22px,5vw,28px);
+            font-weight:bold;
             background: linear-gradient(90deg, #60a5fa, #a78bfa);
             -webkit-background-clip: text;
             color: transparent;
-            margin-bottom:22px;
+            margin-bottom:20px;
         }
         .contract-addr{
             color:#93c5fd;
-            font-size:14px;
+            font-size:13px;
             text-align:center;
             word-break:break-all;
-            margin-bottom:20px;
+            margin-bottom:18px;
             line-height:1.6;
         }
         .info-block {
             background: #16213e;
-            border: 1px solid #3b82f630;
-            border-radius: 12px;
-            padding: 18px;
-            margin-bottom:20px;
+            border:1px solid #3b82f630;
+            border-radius:12px;
+            padding:16px;
+            margin-bottom:18px;
             line-height:2;
         }
         .info-block p{
             color:#bfdbfe;
+            font-size:clamp(14px,3.8vw,16px);
         }
         .info-block span{
             color:#ffffff;
+            word-break:break-all;
         }
         .btn-group{
             display:flex;
-            gap:12px;
+            gap:10px;
             flex-wrap:wrap;
-            margin-bottom:15px;
+            margin-bottom:14px;
         }
         #check-btn{
             flex:1;
-            padding:14px;
+            min-width:130px;
+            padding:13px;
             border:none;
             border-radius:12px;
             font-size:16px;
@@ -96,7 +102,8 @@
         }
         #claim-btn{
             flex:1;
-            padding:14px;
+            min-width:130px;
+            padding:13px;
             border:none;
             border-radius:12px;
             font-size:16px;
@@ -109,42 +116,43 @@
             cursor:not-allowed;
         }
         .pending-display{
-            font-size:19px;
+            font-size:clamp(16px,4.5vw,19px);
             font-weight:bold;
             color:#a78bfa;
             margin:12px 0;
         }
         .status-txt {
-            font-size: 15px;
-            margin: 10px 0;
+            font-size:14px;
+            margin:10px 0;
         }
         .success { color: #34d399; font-weight:bold; }
         .error { color: #f87171; font-weight:bold; }
         .loader {
             display: inline-block;
-            width: 16px;
-            height: 16px;
-            border: 2px solid rgba(255,255,255,0.2);
-            border-top: 2px solid #60a5fa;
-            border-radius: 50%;
+            width:16px;
+            height:16px;
+            border:2px solid rgba(255,255,255,0.2);
+            border-top:2px solid #60a5fa;
+            border-radius:50%;
             animation: spin 1s linear infinite;
-            margin-right: 6px;
+            margin-right:6px;
             vertical-align:middle;
         }
         @keyframes spin {
             to { transform: rotate(360deg); }
         }
-        /*表格样式*/
+        /*表格手机自适应缩小字体*/
         table{
             width:100%;
             border-collapse:collapse;
-            margin-top:25px;
+            margin-top:22px;
         }
         th,td{
-            padding:11px 8px;
+            padding:9px 6px;
             border-bottom:1px solid #3b82f630;
             color:#bfdbfe;
             text-align:left;
+            font-size:13px;
         }
         th{
             background:#16213e;
@@ -152,21 +160,22 @@
         }
         h3{
             color:#93c5fd;
-            margin-top:25px;
+            margin-top:22px;
             margin-bottom:10px;
+            font-size:16px;
         }
-        /*底部常驻提示*/
+        /*底部常驻提示 全屏自适应*/
         .footer-tip {
             position: fixed;
-            bottom: 0;
-            left: 0;
-            width: 100%;
-            background: #16213e;
-            color: #f87171;
-            text-align: center;
-            padding: 12px;
-            font-size: 14px;
-            border-top: 1px solid #3b82f630;
+            bottom:0;
+            left:0;
+            width:100%;
+            background:#16213e;
+            color:#f87171;
+            text-align:center;
+            padding:12px 10px;
+            font-size:13px;
+            border-top:1px solid #3b82f630;
         }
     </style>
 </head>
@@ -377,6 +386,8 @@
     }
 
     window.onload = initProvider;
+    //ios禁止手势缩放
+    document.addEventListener('gesturestart',e=>e.preventDefault());
 </script>
 </body>
 </html>
